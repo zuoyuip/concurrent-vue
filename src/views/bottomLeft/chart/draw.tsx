@@ -43,8 +43,8 @@ export default defineComponent({
               fontWeight: "bold"
             },
             bottom: 12,
-            start: 60,
-            end: 100
+            // start: 60,
+            // end: 100
           }],
           tooltip: {
             trigger: 'axis',
