@@ -1,7 +1,7 @@
 <template>
   <div id="index" ref="appRef">
     <div class="bg">
-      <dv-loading v-if="loading">Loading...</dv-loading>
+      <dv-loading v-if="loading"/>
       <div v-else class="host-body">
         <div class="d-flex jc-center">
           <dv-decoration-10 class="dv-dec-10" />
@@ -27,7 +27,6 @@
 
         <div class="body-box">
               <bottom-left />
-<!--              <bottom-right />-->
         </div>
       </div>
     </div>
@@ -45,18 +44,17 @@ import {
 import { formatTime } from '@/utils/index'
 import { WEEK } from '@/constant/index'
 import useDraw from '@/utils/useDraw'
-import { title, subtitle, moduleInfo } from '@/constant/index'
+import { title, moduleInfo } from '@/constant/index'
 import BottomLeft from '../bottomLeft/index.vue'
-import BottomRight from '../bottomRight/index.vue'
+// * 颜色
+const decorationColors = ['#568aea', '#000000']
 
 export default defineComponent({
   components: {
     BottomLeft,
-    BottomRight
   },
   setup() {
-    // * 颜色
-    const decorationColors = ['#568aea', '#000000']
+
     // * 加载标识
     const loading = ref<boolean>(true)
     // * 时间内容
@@ -70,7 +68,6 @@ export default defineComponent({
     const { appRef, calcRate, windowDraw, unWindowDraw } = useDraw()
     // 生命周期
     onMounted(() => {
-      cancelLoading()
       handleTime()
       // todo 屏幕适应
       windowDraw()
@@ -83,12 +80,6 @@ export default defineComponent({
     })
 
     // methods
-    // todo 处理 loading 展示
-    const cancelLoading = () => {
-      setTimeout(() => {
-        loading.value = false
-      }, 500)
-    }
 
     // todo 处理时间监听
     const handleTime = () => {
@@ -102,11 +93,9 @@ export default defineComponent({
 
     // return
     return {
-      loading,
       timeInfo,
       appRef,
       title,
-      subtitle,
       moduleInfo
     }
   }
