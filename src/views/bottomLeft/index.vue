@@ -2,8 +2,8 @@
   <div class="bottomLeft">
     <div class="bg-color-black">
       <el-row>
-        <el-col :span="4"></el-col>
-        <el-col :span="8" justify="center">
+        <el-col :span="2"></el-col>
+        <el-col :span="10" justify="center">
           <el-form :inline="true">
             <el-form-item label="时间范围">
               <el-date-picker
@@ -17,14 +17,15 @@
               />
             </el-form-item>
             <el-form-item>
-              <el-button :disabled="isSearch" @click="searchData">查询</el-button>
+              <el-button :disabled="isSearch" @click="searchData">询价统计</el-button>
+              <el-button :disabled="isSearch" @click="verifyData">验价统计</el-button>
             </el-form-item>
           </el-form>
         </el-col>
         <el-col :span="2"></el-col>
         <el-col :span="8">
           <el-form :inline="true">
-            <el-form-item label="实时观察">
+            <el-form-item label="询价实时观察">
               <el-date-picker
                   v-model="syncTime"
                   format="YYYY-MM-DD HH:mm:ss"
@@ -110,7 +111,7 @@ export default defineComponent({
       isSearch.value = true
       searchSetInterval = setInterval(() => {
         request({
-          url: '/aggregation',
+          url: '/searchAggregation',
           method: 'post',
           data: {
             start: start,
@@ -137,7 +138,28 @@ export default defineComponent({
       let end = dateTime.value[1];
 
       request({
-        url: '/aggregation',
+        url: '/searchAggregation',
+        method: 'post',
+        data: {
+          start: start,
+          end: end
+        }
+      }).then(value => {
+        cdata.dateTime = value.dateTime
+        cdata.count = value.count
+        cdata.failRate = value.failRate
+        cdata.successRate = value.successRate
+        cdata.timeOutRate = value.timeOutRate
+        cdata.validRate = value.validRate
+      })
+    }
+
+    const verifyData = () => {
+      let start = dateTime.value[0];
+      let end = dateTime.value[1];
+
+      request({
+        url: '/verifyAggregation',
         method: 'post',
         data: {
           start: start,
@@ -159,7 +181,7 @@ export default defineComponent({
     })
 
     return {
-      cdata, shortcuts, dateTime, syncTime, searchData, isSearch, syncSearch, closeSyncSearch
+      cdata, shortcuts, dateTime, syncTime, searchData, isSearch, syncSearch, verifyData, closeSyncSearch
     }
   }
 })
